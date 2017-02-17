@@ -71,7 +71,7 @@ public class accelerometerEventListener implements SensorEventListener {
                 else if (deltaA < THRES_B[0]) {     // slope is negative, we have started the left gesture (B)
                     state = myState.FALL_B;
                 }
-                else if (deltaZAxis > THRES_C[0]) { // slope is positive, we have started the backwards gesture (C)
+                if (deltaZAxis > THRES_C[0]) { // slope is positive, we have started the backwards gesture (C)
                     state = myState.RISE_C;
                 }
                 else if (deltaZAxis < THRES_D[0]) { // slope is negative, we have started the forwards gesture (D)
@@ -109,7 +109,7 @@ public class accelerometerEventListener implements SensorEventListener {
 
                 Log.d("FSM: ", "State RISE_C");
 
-                if (deltaA <= 0) {  // we want to stay in this state until we are done rising and start to fall
+                if (deltaZAxis <= 0) {  // we want to stay in this state until we are done rising and start to fall
                     if (aReadings[99][2] >= THRES_C[1]) {  // check if the peak was a large enough value
                         state = myState.FALL_C;            // if yes, proceed to look at the falling motion of the wave
                     }
@@ -123,7 +123,7 @@ public class accelerometerEventListener implements SensorEventListener {
 
                 Log.d("FSM: ", "State RISE_D");
 
-                if (deltaA <= 0) {      // crossed over from rising to falling (rising to falling to rebound)
+                if (deltaZAxis <= 0) {      // crossed over from rising to falling (rising to falling to rebound)
                     if (aReadings[99][2] >= THRES_D[2]) {   // check if the rebound value was a low enough value
                         signature = mySig.SIG_D;            // if yes, we have determined it is a left gesture
                     }
@@ -161,7 +161,7 @@ public class accelerometerEventListener implements SensorEventListener {
 
                 Log.d("FSM: ", "State FALL_C");
 
-                if (deltaA >= 0) {      // crossed over from falling to rising (rising to falling to rebound)
+                if (deltaZAxis >= 0) {      // crossed over from falling to rising (rising to falling to rebound)
                     if (aReadings[99][2] <= THRES_C[2]) {   // we check if the rebound value is low enough
                         signature = mySig.SIG_C;            // if yes, we have determined it is a right gesture
                     }
@@ -173,7 +173,7 @@ public class accelerometerEventListener implements SensorEventListener {
 
                 Log.d("FSM: ", "State FALL_D");
 
-                if (deltaA >= 0) { // we want to stay in this state until we are done falling and start to rise
+                if (deltaZAxis >= 0) { // we want to stay in this state until we are done falling and start to rise
                     if (aReadings[99][2] <= THRES_D[1]) {   // check if the peak was a low enough value
                         state = myState.RISE_D;             // if yes, we now look at the rising motion of the wave
                     }
